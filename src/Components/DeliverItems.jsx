@@ -1,64 +1,75 @@
-import React, { useEffect, useState } from "react";
-import ReactMapGL, { Marker, Popup } from 'react-map-gl'
-import * as parkData from './map.json'
+import React, { useRef, useState} from "react";
+import ReactMapGL, {GeolocateControl} from 'react-map-gl'
+import Geocoder from 'react-map-gl-geocoder'
+import DeckGL, { GeoJsonLayer } from 'deck.gl'
 
 const DeliverItems = () => {
 
     const [viewport, setviewport] = useState({
         latitude: 45.4211,
         longitude: -75.6903,
-        zoom: 10,
+        zoom: 1,
         width: '100vw',
-        height: '100vh'
+        height: '100vh',
+        transitionDuration: 100
     });
 
-    const [selectedPark, setSelectedPark] = useState(null);
+    const geolocateControlStyle = {
+        right: 10,
+        top: 10
+    };
 
-    useEffect(() => {
-        const listener = e => {
-            if (e.key === 'Escape') {
-                setSelectedPark(null);
-            }
-        };
-        window.addEventListener('keydown', listener);
+    const [search, setSearch] = useState(null);
 
-        return () => {
-            window.removeEventListener('keydown', listener);
-        };
-    }, [])
+    const mapref = useRef()
+
+    const handleOnResult = event => {
+        setSearch(new GeoJsonLayer({
+            id: "search-result",
+            data: event.result.geometry,
+            getFillColor: [255, 0, 0, 128],
+            getRadius: 1000,
+            pointRadiusMinPixels: 10,
+            pointRadiusMaxPixels: 10
+        })
+        )
+    }
+
+    const handleGeocoderViewportChange = viewport => {
+        const geocoderDefaultOverrides = { transitionDuration: 1000 };
+        console.log("Updating")
+
+        return setviewport({
+            ...viewport,
+            ...geocoderDefaultOverrides
+        });
+    }
 
     return (
         <>
-            <ReactMapGL {...viewport}
+            <ReactMapGL
+                {...viewport}
+                ref={mapref}
                 mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
                 mapStyle="mapbox://styles/mapbox/streets-v11"
                 onViewportChange={viewport => {
                     setviewport(viewport)
                 }}
             >
-                {parkData.features.map(park => (
-                    <Marker key={park.properties.PARK_ID} latitude={park.geometry.coordinates[1]} longitude={park.geometry.coordinates[0]}>
-                        <button className="marker-btn" onClick={(e) => {
-                            e.preventDefault();
-                            setSelectedPark(park);
-                        }
-                        }>
-                            <img src="/public/favicon.ico" alt="marker" />
-                        </button>
-                    </Marker>
-                ))}
-                {selectedPark ? (
-                    <Popup latitude={selectedPark.geometry.coordinates[1]}
-                        longitude={selectedPark.geometry.coordinates[0]}
-                        onClose={() => {
-                            setSelectedPark(null);
-                        }
-                        }>
-                        <h2>{selectedPark.properties.NAME}</h2>
-                        <p>{selectedPark.properties.DESCRIPTIO}</p>
-                    </Popup>
-                ) : null}
+                <GeolocateControl
+                    style={geolocateControlStyle}
+                    positionOptions={{ enableHighAccuracy: true }}
+                    trackUserLocation={true}
+                />
+                <Geocoder
+                    mapRef={mapref}
+                    onResult={handleOnResult}
+                    onViewportChange={handleGeocoderViewportChange}
+                    mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+                    position='top-left'
+                />
             </ReactMapGL>
+            <DeckGL {...viewport} layers={[search]} />
         </>
     );
 }
