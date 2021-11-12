@@ -56,6 +56,15 @@ const OrderItems = () => {
         // }
     }
 
+    // const deleteButton = (e) => {
+    //     e.preventDefault()
+    //     // db.collection('restaurant').get().then((snapshot) => {
+    //     //     snapshot.docs.forEach(doc => {
+    //     //        db.collection('restaurant').doc(doc.id).delete()
+    //     //     })
+    //     // })
+    // }
+
     const resetButton = (e) => {
         setform({
             name: '',
@@ -64,15 +73,6 @@ const OrderItems = () => {
             dropdown: '',
             order: ''
         })
-    }
-
-    const deleteButton = (e) => {
-        e.preventDefault()
-        // db.collection('restaurant').get().then((snapshot) => {
-        //     snapshot.docs.forEach(doc => {
-        //        db.collection('restaurant').doc(doc.id).delete()
-        //     })
-        // })
     }
 
     return (
@@ -113,7 +113,7 @@ const OrderItems = () => {
                 <div className="mb-3">
                     <button type='submit' onClick={submitButton} className="btn btn-success">Submit</button>
                     <button type='reset' onClick={resetButton} className="btn btn-danger ml-3">Cancel</button>
-                    <button type='delete' onClick={deleteButton} className="btn btn-warning ml-3">Delete From Database</button>
+                    {/* <button type='delete' onClick={deleteButton} className="btn btn-warning ml-3">Delete From Database</button> */}
                 </div>
             </div>
         </>
