@@ -1,5 +1,5 @@
-import React, { useRef, useState} from "react";
-import ReactMapGL, {GeolocateControl} from 'react-map-gl'
+import React, { useRef, useState } from "react";
+import ReactMapGL, { GeolocateControl } from 'react-map-gl'
 import Geocoder from 'react-map-gl-geocoder'
 import DeckGL, { GeoJsonLayer } from 'deck.gl'
 
@@ -41,7 +41,7 @@ const DeliverItems = () => {
 
         return setviewport({
             ...viewport,
-            ...geocoderDefaultOverrides
+            ...geocoderDefaultOverrides,
         });
     }
 

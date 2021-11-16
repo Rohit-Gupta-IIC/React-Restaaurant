@@ -9,17 +9,19 @@ import ListItems from './Components/ListItems.jsx';
 import DeliverItems from './Components/DeliverItems.jsx';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import MapBX from './Components/Map.jsx';
 
 const App = () => {
   return (
     <>
-      <Rheader />
+      {/* <Rheader /> */}
       <div className="b-example-divider"></div>
       <Routes>
         <Route exact path="/" element={<Home/>}/>
         <Route path="/order" element={<OrderItems/>} />
         <Route path="/list" element={<ListItems/>} />
         <Route path="/deliver" element={<DeliverItems/>} />
+        <Route path="/map" element={<MapBX/>} />
       </Routes>
       <div className="b-example-divider"></div>
       <Rfooter />

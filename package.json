@@ -11,6 +11,7 @@
     "cors": "^2.8.5",
     "deck.gl": "^8.6.3",
     "firebase": "^9.2.0",
+    "mapbox-gl": "^2.6.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-map-gl": "^6.1.17",
